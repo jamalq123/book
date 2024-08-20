@@ -1,16 +1,13 @@
 import streamlit as st
-import PyPDF2
+import pdfplumber
 from docx import Document
 
 def pdf_to_text(pdf_file):
-    # Initialize a PDF reader
-    reader = PyPDF2.PdfReader(pdf_file)
-    
-    # Extract text from each page
-    text = ""
-    for page in range(len(reader.pages)):
-        text += reader.pages[page].extract_text()
-
+    # Initialize pdfplumber
+    with pdfplumber.open(pdf_file) as pdf:
+        text = ""
+        for page in pdf.pages:
+            text += page.extract_text() + "\n"
     return text
 
 def save_to_word(text, output_filename):
